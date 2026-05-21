@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Seetha Ramachandra Swamy Temple | Saigudem</title>
+    <meta name="google-site-verification" content="--tv_h2eQQBPChVhjLaQaQm1mILSPZNXeg7Wri0Kz3s" />
+    <meta name="description" content="Official website of Sri Seetha Ramachandra Swamy Temple, Saigudem. Explore temple history, darshan timings, festivals, and participate in online sevas.">
+    <meta name="keywords" content="Saigudem Temple, Sri Seetha Ramachandra Swamy, Lord Rama Temple Telangana, Saigudem Jathara, Bhadradri of Nalgonda, Temple Donations">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://temple-website-demo.netlify.app/">
+    <meta property="og:title" content="Sri Seetha Ramachandra Swamy Temple | Saigudem">
+    <meta property="og:description" content="Visit the ancient 'Second Bhadradri' in Saigudem. Experience divine darshan and rich history.">
+    <meta property="og:image" content="https://temple-website-demo.netlify.app/assets/hero_main.jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans:wght@400;700&family=Ramabhadra&family=Tiro+Telugu&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+
+    <!-- Background Audio -->
+    <audio id="bg-audio" loop>
+        <source src="assets/Ram - Hanuman Voice-Downringtone.com.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+
+    <!-- Audio Control (Floating) -->
+    <div id="audio-control">
+        <button id="mute-toggle" title="Toggle Audio">🔊</button>
+    </div>
+
+    <!-- Government bar removed per user request -->
+
+    <!-- Majestic Temple Header -->
+    <header class="temple-header">
+        <div class="header-inner">
+            <div class="header-side left">
+                <img src="assets/logo_main.jpg" alt="Temple Emblem" class="temple-emblem">
+            </div>
+            
+            <div class="header-center">
+                <div class="title-wrap">
+                    <h1 class="english-name">SRI SEETHA RAMACHANDRA SWAMY TEMPLE</h1>
+                    <div class="title-divider">
+                        <span class="divider-line"></span>
+                        <span class="divider-icon">🕉️</span>
+                        <span class="divider-line"></span>
+                    </div>
+                    <h2 class="telugu-name">శ్రీ సీతా రామచంద్ర స్వామి వారి దేవాలయం</h2>
+                </div>
+                <div class="location-badge">
+                    <span>SAIGUDEM, ALER · YADADRI BHONGIRI DIST</span>
+                </div>
+            </div>
+
+            <div class="header-side right">
+                <img src="assets/logo_sun.jpg" alt="Official Seal" class="deity-small-frame">
+            </div>
+        </div>
+    </header>
+
+    <!-- Maroon Navigation Bar -->
+    <nav class="temple-nav">
+        <div class="nav-container">
+            <button id="nav-toggle" aria-label="Toggle Menu">☰</button>
+            <ul class="nav-menu">
+                <li><a href="#home" class="active">HOME</a></li>
+                <li><a href="javascript:void(0)" onclick="openHistoryModal()">HISTORY</a></li>
+                <li><a href="javascript:void(0)" onclick="openDarshanModal()">DARSHAN & SEVAS</a></li>
+                <li><a href="javascript:void(0)" onclick="openFestivalsModal()">FESTIVALS</a></li>
+                <li><a href="#gallery">GALLERY</a></li>
+                <li><a href="javascript:void(0)" onclick="openCommitteesModal()">COMMITTEES</a></li>
+
+                <li><a href="#contact">CONTACT</a></li>
+                <li><a href="admin.html" title="Admin Panel" style="opacity:0.6; font-size:0.8rem;">⚙ ADMIN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Main Content Layout (Sidebar + Content) -->
+    <div class="page-layout">
+        
+        <!-- Left Sidebar: Quick Links & Announcements -->
+        <aside class="left-sidebar">
+            <div class="sidebar-block">
+                <div class="sidebar-header">QUICK LINKS</div>
+                <ul class="quick-links-list">
+                    <li><a href="javascript:void(0)" onclick="openDarshanModal()"><span class="arrow">➤</span> Darshan Timings</a></li>
+                    <li><a href="javascript:void(0)" onclick="openFestivalsModal()"><span class="arrow">➤</span> Upcoming Festivals</a></li>
+                    <li><a href="javascript:void(0)" onclick="openComingSoonModal('Online Ticket Booking')"><span class="arrow">➤</span> Book Tickets</a></li>
+
+                    <li><a href="javascript:void(0)" onclick="openComingSoonModal('Accommodation Booking')"><span class="arrow">➤</span> Accommodation</a></li>
+                    <li><a href="#map"><span class="arrow">➤</span> Route Map</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-block">
+                <div class="sidebar-header">ANNOUNCEMENTS</div>
+                <div class="announcement-box">
+                    <marquee id="announcement-marquee" direction="up" scrollamount="1" height="150px" onmouseover="this.stop()" onmouseout="this.start()">
+                        <!-- Dynamic Announcements -->
+                    </marquee>
+                    <!-- Static Volunteer Announcement -->
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ddd;">
+                        <p style="cursor: pointer; color: var(--govt-maroon); font-weight: bold; display: flex; align-items: center; gap: 5px; margin: 0;" onclick="openVolunteerModal()">
+                            <span style="color: var(--govt-gold); font-size: 1.2rem;">★</span> Register as a Volunteer
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-block" id="committee-sidebar-block" style="margin-top: 20px;">
+                <div class="sidebar-header">COMMITTEES</div>
+                <div class="announcement-box" id="committee-sidebar-container" style="padding: 15px; background: #fff;">
+                    <p style="color: #666; font-size: 0.85rem; text-align: center;">Loading committees...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Shared Center Wrapper for alignment -->
+            <div class="center-content-wrapper">
+                
+                <!-- Hero Image Frame -->
+                <section id="home" class="hero-frame">
+                    <div class="deity-image-wrapper">
+                        <img src="assets/hero_main.jpg" alt="Sri Seetha Ramachandra Swamy" class="deity-main-img">
+                    </div>
+                </section>
+                
+                <!-- Main content will be dynamically loaded here, excluding redundant sections -->
+
+                <!-- Horizontal Image Gallery -->
+                <section id="gallery" class="gallery-section">
+                    <div class="gallery-header">
+                        <h2>TEMPLE GALLERY</h2>
+                    </div>
+                    
+                    <div class="gallery-container-inner">
+                        <button class="scroll-btn left" onclick="scrollGallery('left')">◀</button>
+                        
+                        <div class="gallery-viewport">
+                            <div class="gallery-grid" id="gallery-scroll">
+                                <!-- Skeleton Loaders -->
+                                <div class="gallery-skeleton shimmer"></div>
+                                <div class="gallery-skeleton shimmer"></div>
+                                <div class="gallery-skeleton shimmer"></div>
+                                <div class="gallery-skeleton shimmer"></div>
+                            </div>
+                        </div>
+
+                        <button class="scroll-btn right" onclick="scrollGallery('right')">▶</button>
+                    </div>
+                </section>
+
+            </div>
+            
+            <!-- Dynamic Sections -->
+            <div id="dynamic-content"></div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-grid">
+            <!-- Col 1: Logo -->
+            <div class="footer-col footer-logo-col">
+                <img src="assets/logo_main.jpg" alt="Temple Seal" class="footer-seal">
+            </div>
+
+            <!-- Col 2: About -->
+            <div class="footer-col">
+                <h3>About Temple</h3>
+                <p class="footer-about-text">
+                    Lord Sri Seetha Ramachandra Swamy Temple in Saigudem is a Hindu temple of Lord Rama located in Telangana, India. The area is called as Saigudem and is the venue of grand celebrations on Rama Navami day.
+                </p>
+            </div>
+
+            <!-- Col 3: Quick Links -->
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="openHistoryModal()">History</a></li>
+                    <li><a href="javascript:void(0)" onclick="openDarshanModal()">Darshan Timings</a></li>
+
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 4: Contact -->
+            <div class="footer-col contact-col" id="contact">
+                <h3>Contact</h3>
+                <div class="contact-details">
+                    <p><strong>Sri Seetha Ramachandra Swamy Devasthanam,</strong></p>
+                    <p>Saigudem, Aler,</p>
+                    <p>Yadadri Bhongiri District,</p>
+                    <p>Telangana - 508101</p>
+                </div>
+                <!-- Placeholder for Sage Image if needed later -->
+                <!-- <img src="assets/sage_placeholder.png" class="sage-img"> -->
+            </div>
+        </div>
+        
+        <!-- Copyright Strip -->
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2025. All Rights Reserved by Sri Seetha Ramachandra Swamy Devasthanam.</p>
+        </div>
+    </footer>
+
+    <!-- History Modal (Full Screen Reader) -->
+    <div id="history-modal">
+
+        <!-- Sticky Top Navigation Bar -->
+        <div class="history-topbar">
+            <div>
+                <div class="history-topbar-title">Temple History</div>
+                <div class="history-topbar-subtitle">శ్రీ సీతా రామచంద్ర స్వామి ఆలయ చరిత్ర</div>
+            </div>
+            <button class="history-close-btn" onclick="closeHistoryModal()" title="Close">✖</button>
+        </div>
+
+        <!-- Scrollable Reading Area -->
+        <div class="history-reader">
+            <div class="history-reader-inner">
+
+                <!-- Opening Banner -->
+                <div class="history-opening">
+                    <span class="history-opening-icon">🛕</span>
+                    <h1 class="history-main-title">Sri Seetha Ramachandra Swamy Temple</h1>
+                    <p class="history-main-subtitle">సాయీగూడెం — రెండవ భద్రాచలం</p>
+                    <p class="history-tagline">Saigudem, Aler · Yadadri Bhongiri District, Telangana</p>
+                </div>
+
+                <!-- Chapter 1 -->
+                <div class="history-chapter">
+                    <span class="chapter-number">Chapter 1</span>
+                    <h2 class="chapter-title">శ్రీరాముని ఆగమనం: అరణ్యవాసపు మజిలీ</h2>
+                    <div class="chapter-body">
+                        <p>త్రేతాయుగంలో పితృవాక్య పరిపాలన కోసం శ్రీరామచంద్రుడు సీతా లక్ష్మణ సమేతుడై అరణ్యవాసం చేస్తున్న కాలం అది. దట్టమైన అడవుల గుండా ప్రయాణిస్తూ, ప్రకృతి ఒడిలో సేదతీరుతూ వారు దక్షిణాపథానికి చేరుకున్నారు. ఆ ప్రయాణంలో భాగంగానే శ్రీరాముడు, లక్ష్మణునితో కలిసి సాయీగూడెం ప్రాంతానికి చేరుకున్నారు.</p>
+                        <p>ఆ రోజు సాయంకాలం అవుతోంది. పక్షుల కిలకిలరావాలు, ప్రశాంతమైన వాతావరణం శ్రీరాముని ఆకర్షించాయి. సూర్యుడు అస్తమిస్తున్న ఆ సమయంలో సంధ్యవందనం (సూర్యోపాసన) ఆచరించడం రాముని నిత్యకృత్యం. సంధ్యవందనం కోసం పవిత్రమైన జలం అవసరమైంది.</p>
+                        <p>శ్రీరామచంద్రుడు తన దివ్యమైన బాణాన్ని సంధించారు. ఆ బాణం తగిలిన చోట బండ చీలి, భూగర్భం నుండి స్వచ్ఛమైన గంగ ఉబికి వచ్చింది. ఆ పవిత్ర జలంతోనే స్వామివారు తన సంధ్యవందనాన్ని పూర్తి చేసుకున్నారు.</p>
+                    </div>
+                </div>
+
+                <!-- Chapter 2 -->
+                <div class="history-chapter">
+                    <span class="chapter-number">Chapter 2</span>
+                    <h2 class="chapter-title">పవిత్ర గుండం: ప్రకృతి మరియు దైవం కలిసిన చోటు</h2>
+                    <div class="chapter-body">
+                        <p>సాయీగూడెం ఆలయ ప్రాంగణంలో ఉన్న ఈ గుండం నిజంగా ఒక అద్భుతం.</p>
+                        <ul>
+                            <li><strong>నిర్మాణ కౌశలం:</strong> ఈ గుండం మనిషి చెక్కినట్లుగా కాకుండా, అత్యంత నునుపుగా ఉంటుంది. బండ మధ్యలో ప్రకృతి సిద్ధంగా (రాముని బాణం వల్ల) ఏర్పడిన ఈ కోనేరులో నీరు ఎప్పుడూ స్వచ్ఛంగా, నిండుగా ఉంటుంది.</li>
+                            <li><strong>ఆధ్యాత్మిక విశ్వాసం:</strong> ఈ గుండంలోని నీటిని తాగిన వారికి లేదా అందులో స్నానం చేసిన వారికి సకల పాపాలు తొలగి 'వైకుంఠ ప్రాప్తి' లభిస్తుందని భక్తుల గాఢ విశ్వాసం. ఇక్కడి బండను 'రాముని బండ' అని లేదా 'యోగాచలం' అని పిలుస్తారు.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Chapter 3 -->
+                <div class="history-chapter">
+                    <span class="chapter-number">Chapter 3</span>
+                    <h2 class="chapter-title">పురాతన శివాలయం – కదిలే లింగం</h2>
+                    <div class="chapter-body">
+                        <p>రాముని గుండానికి తూర్పు దిశలో అత్యంత ప్రాచీనమైన శివాలయం ఉంది. ఇక్కడి శివలింగం చుట్టూ అరిగిపోయిన ప్రాచీన తెలుగు లిపి శాసనాలు కనిపిస్తాయి. ఈ శాసనాల ఆధారంగా ఈ క్షేత్రం కొన్ని శతాబ్దాల క్రితమే గొప్ప వైభవంతో విలసిల్లిందని తెలుస్తోంది.</p>
+                        <div class="history-quote">
+                            విశేషం: గుండంలో ఒక మెట్టు వంటి భాగంపై 'కదిలే శివలింగం' ఉండటం ఇక్కడ మరో గొప్ప విశేషం. ఇది హరిహరాద్వైతానికి ప్రతీకగా నిలుస్తూ భక్తులను ఆకట్టుకుంటుంది.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter 4 -->
+                <div class="history-chapter">
+                    <span class="chapter-number">Chapter 4</span>
+                    <h2 class="chapter-title">రెండవ భద్రాచలం – ఆలయ వైభవం</h2>
+                    <div class="chapter-body">
+                        <p>సాయీగూడెంలోని శ్రీ రామాలయాన్ని భక్తులు భక్తిశ్రద్ధలతో <strong>'రెండవ భద్రాచలం'</strong> గా కొలుస్తారు.</p>
+                        <p><strong>శిల్పకళ:</strong> ఆలయ ప్రాంగణంలోని గరుత్మంతుడు మరియు హనుమంతుని విగ్రహాలు భారీ పరిమాణంలో ఉండి, 16వ శతాబ్దపు విజయనగర లేదా కాకతీయ శిల్పకళా రీతులను గుర్తుకు తెస్తాయి.</p>
+                        <p><strong>నిజాం నజరానాలు:</strong> పూర్వం నిజాం రాజులు సైతం ఈ రాముని మహిమను గుర్తించి, ప్రతి ఏటా శ్రీరామనవమి తలంబ్రాలను, పట్టువస్త్రాలను ఏనుగు అంబారీపై పంపేవారట.</p>
+                    </div>
+                </div>
+
+                <!-- Chapter 5 -->
+                <div class="history-chapter">
+                    <span class="chapter-number">Chapter 5</span>
+                    <h2 class="chapter-title">దోపోత్సవం: సాయీగూడెం మహా జాతర</h2>
+                    <div class="chapter-body">
+                        <p>ప్రతి ఏటా చైత్ర పౌర్ణమి నాడు సాయీగూడెంలో జరిగే <strong>'దోపోత్సవం'</strong> ఒక ఆధ్యాత్మిక పండుగ మాత్రమే కాదు, అది ఒక అద్భుతమైన ప్రజా ఉత్సవం.</p>
+                        <p><strong>పురాణ నేపథ్యం:</strong> రంగనాయక స్వామి మరియు ఆండాళమ్మల వివాహం జరిగిన తర్వాత, వారు ఏకాంతంగా వస్తున్న సమయంలో ఒక గజదొంగ వారిని అడ్డగించి ఆభరణాలను దోచుకుంటాడు. ఆ దొంగ ఆ సంపదను పేద ప్రజలకు పంచిపెడతాడు. భగవంతుని సంపద భక్తులకు చేరాలనే అంతరార్థంతో సాగే ఈ ఘట్టమే 'దోపోత్సవం'.</p>
+                        <p><strong>జాతర సందడి:</strong> ఈ వేడుకను చూడటానికి సాయీగూడెం చుట్టుపక్కల గ్రామాల నుండి వేలాదిగా భక్తులు తరలివస్తారు. అన్ని రకాల దుకాణాలు, తినుబండారాలతో ఆ ప్రాంతమంతా కిటకిటలాడుతుంది.</p>
+                        <p><strong>తెల్లవారుజాము వరకు వేడుక:</strong> భక్తులు రాత్రంతా నిద్రపోకుండా భజనలు, సాంస్కృతిక కార్యక్రమాల్లో పాల్గొంటారు. సరిగ్గా బ్రహ్మ ముహూర్త సమయంలో స్వామి వారికి 'దోపోత్సవం' నిర్వహించడంతో ఈ జాతర శిఖరాగ్రానికి చేరుకుంటుంది.</p>
+                    </div>
+                </div>
+
+                <!-- Closing Quote -->
+                <div class="history-end">
+                    <div class="history-end-divider">🔱</div>
+                    <div class="history-quote" style="max-width:600px; margin: 0 auto 30px;">
+                        సాయీగూడెం క్షేత్రం దర్శిస్తే మానసిక ప్రశాంతత లభిస్తుందనేది కేవలం నమ్మకం మాత్రమే కాదు, అది అనుభవపూర్వక సత్యం.
+                    </div>
+                    <button class="btn-primary" onclick="closeHistoryModal()" style="margin-top: 10px;">← Back to Home</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Volunteer Registration Modal -->
+    <div id="volunteer-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close-modal" onclick="closeVolunteerModal()">&times;</span>
+            <div class="modal-header" style="background: var(--govt-maroon); color: white; border-bottom: 2px solid var(--govt-gold); border-radius: 12px 12px 0 0;">
+                <h2 style="color: white; font-size: 1.5rem; margin: 0;">Seva Volunteer Registration</h2>
+                <p style="color: #f0f0f0; margin-top: 5px; font-size: 0.9rem;">Join us in the divine service of the Lord</p>
+            </div>
+            <form id="volunteer-form" onsubmit="submitVolunteerForm(event)" style="padding: 25px; max-height: 70vh; overflow-y: auto;">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Personal Details -->
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-name">Full Name *</label>
+                        <input type="text" id="v-name" required placeholder="Full Name">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-guardian">Father / Guardian Name *</label>
+                        <input type="text" id="v-guardian" required placeholder="Name">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-age">Age *</label>
+                        <input type="number" id="v-age" required placeholder="Age">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-gender">Gender *</label>
+                        <select id="v-gender" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-phone">Mobile Number *</label>
+                        <input type="tel" id="v-phone" required placeholder="10-digit Mobile">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-email">Email ID</label>
+                        <input type="email" id="v-email" placeholder="example@gmail.com">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="v-address">Complete Address *</label>
+                    <textarea id="v-address" rows="2" required placeholder="House No, Street, City, Pincode" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-occupation">Occupation</label>
+                        <input type="text" id="v-occupation" placeholder="Student / Employee / Business">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-availability">Availability *</label>
+                        <select id="v-availability" required>
+                            <option value="Weekends">Weekends Only</option>
+                            <option value="Weekdays">Weekdays</option>
+                            <option value="Festival Days">Festival Days</option>
+                            <option value="Anytime">Anytime</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-area">Area of Interest *</label>
+                        <select id="v-area" required>
+                            <option value="Temple Services">General Service</option>
+                            <option value="Annadanam">Annadanam</option>
+                            <option value="Crowd Control">Crowd Control</option>
+                            <option value="Decorations">Decorations</option>
+                            <option value="Office">Office/Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="v-slot">Preferred Time Slot</label>
+                        <select id="v-slot">
+                            <option value="Morning">Morning (6 AM - 12 PM)</option>
+                            <option value="Afternoon">Afternoon (12 PM - 4 PM)</option>
+                            <option value="Evening">Evening (4 PM - 9 PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="v-emergency">Emergency Contact Number *</label>
+                    <input type="tel" id="v-emergency" required placeholder="Emergency Contact">
+                </div>
+                
+                <div class="checkbox-group" style="margin-top: 20px; display: flex; align-items: start; gap: 10px;">
+                    <input type="checkbox" id="v-consent" required style="width: auto; margin-top: 5px;">
+                    <label for="v-consent" style="font-weight: normal; font-size: 0.9rem;">I agree to follow the temple rules and regulations during my seva.</label>
+                </div>
+
+                <div class="form-actions" style="margin-top: 25px; text-align: center; justify-content: center;">
+                    <button type="submit" class="btn-primary" style="padding: 12px 40px;">Register as Volunteer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Darshan Timings Modal -->
+    <div id="darshan-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-modal" onclick="closeDarshanModal()">&times;</span>
+            <div class="modal-header" style="background: var(--govt-maroon); color: white; border-radius: 12px 12px 0 0;">
+                <h2 style="color: white; margin: 0; font-size: 1.5rem;">Temple Darshan Timings</h2>
+            </div>
+            <div class="darshan-body" style="padding: 30px; text-align: center;">
+                
+                <!-- Dynamic Content Container -->
+                <div id="darshan-timings-container" class="loader-placeholder">
+                    Loading timings...
+                </div>
+
+                <p style="margin-top: 30px; font-size: 0.85rem; color: #888; font-style: italic;">
+                    * Timings may vary on festival and special occasion days.
+                </p>
+
+                <button class="btn-primary" onclick="closeDarshanModal()" style="margin-top: 20px; border: 1px solid var(--govt-gold);">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Coming Soon Modal -->
+    <div id="coming-soon-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align: center; max-width: 400px;">
+            <span class="close-modal" onclick="closeComingSoonModal()">&times;</span>
+            <div class="modal-header" style="border-bottom: none;">
+                <h2 style="color: var(--govt-maroon); margin-bottom: 10px;">🚧 Under Progress</h2>
+            </div>
+            <div class="coming-soon-body">
+                <p id="coming-soon-text" style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
+                    This feature is currently being developed.
+                </p>
+                <button class="submit-btn" onclick="closeComingSoonModal()" style="width: auto; padding: 10px 30px;">Okay</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Festivals Modal -->
+    <div id="festivals-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeFestivalsModal()">&times;</span>
+            <div class="modal-header" style="background: var(--govt-maroon); color: white; border-bottom: 2px solid var(--govt-gold); border-radius: 12px 12px 0 0;">
+                <h2 style="color: white; margin: 0; font-size: 1.5rem; line-height: 1.4;">2026 సంవత్సరానికి ముఖ్యమైన పండుగలు</h2>
+            </div>
+            
+            <div class="modal-body" style="padding: 0;">
+                <div id="festival-list-container" class="festival-list">
+                    <!-- Dynamic Content Will Be Loaded Here -->
+                </div>
+                
+                <!-- Disclaimer -->
+                <div style="text-align: center; padding: 15px; background: #f9f9f9; border-top: 1px solid #eee; border-radius: 0 0 12px 12px;">
+                    <p style="font-size: 0.9rem; color: #777; margin: 0;">
+                        ⚠️ పండుగల తేదీలు పంచాంగం ప్రకారం మారవచ్చు.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="modal-overlay" onclick="closeLightbox()">
+        <span class="close-modal" style="color:white; right: 20px; top: 10px; font-size: 3rem;">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <!-- Committees Modal -->
+    <div id="committees-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 900px; width: 95%;">
+            <span class="close-modal" onclick="closeCommitteesModal()">&times;</span>
+            <div class="modal-header" style="background: var(--govt-maroon); color: white; border-bottom: 2px solid var(--govt-gold); border-radius: 12px 12px 0 0;">
+                <h2 style="color: white; margin: 0; font-size: 1.5rem; line-height: 1.4;">COMMITTEES</h2>
+                <p style="color: #f0f0f0; margin-top: 5px; font-size: 0.9rem;">Devotional Services</p>
+            </div>
+            <div class="modal-body" style="padding: 25px; max-height: 75vh; overflow-y: auto; background: #fdf8ec;">
+                <div id="committees-modal-container" class="card-grid" style="margin-top: 0; gap: 20px;">
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Loading committees...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Critical UI Rendering (Runs instantly & synchronously) -->
+    <script src="scripts/mockData.js?v=6"></script>
+    <script src="scripts/render.js?v=6"></script>
+    <script src="scripts/main.js?v=6"></script>
+    
+    <!-- Heavy Firebase SDKs & API Client (Loaded in background, executed in order) -->
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script defer src="scripts/firebase-config.js?v=6"></script>
+    <script defer src="scripts/api.js?v=6"></script>
+</body>
+</html>

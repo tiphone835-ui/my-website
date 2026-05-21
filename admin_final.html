@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temple Admin Panel | Sri Seetha Ramachandra Swamy Devasthanam</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles/variables.css">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-offset: 70px;
+            --sidebar-bg: #2C1810;
+            --sidebar-text: #E0C097;
+            --sidebar-active: #800000;
+            --content-bg: #f5f5f5;
+            --govt-maroon: #800000;
+            --govt-gold: #D4AF37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: var(--content-bg);
+            color: #2C1810;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header.admin-header {
+            height: var(--header-offset);
+            background: linear-gradient(135deg, #800000 0%, #5a0000 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo img {
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #D4AF37;
+        }
+
+        .header-logo h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .back-link {
+            color: #D4AF37;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Main Wrapper */
+        .admin-main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside.admin-sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            color: #bfa580;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-active);
+            color: white;
+            border-left-color: #D4AF37;
+        }
+
+        /* Content Area */
+        section.admin-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .content-header h2 {
+            font-family: 'Cinzel', serif;
+            color: #800000;
+            font-size: 1.8rem;
+        }
+
+        .btn-add {
+            background: #800000;
+            color: white;
+            border: 2px solid #D4AF37;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #6a0000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #eee;
+        }
+
+        th {
+            padding: 15px 20px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            color: #444;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background-color: #fffbef;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-right: 10px;
+            transition: transform 0.2s;
+        }
+
+        .btn-edit { color: #3182ce; }
+        .btn-delete { color: #e53e3e; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: #800000;
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #D4AF37;
+        }
+
+        .modal-body { padding: 25px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            background: #f8f9fa;
+            text-align: right;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #333;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            display: none;
+            z-index: 3000;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="header-logo">
+            <img src="assets/logo_main.jpg" alt="Logo" class="login-logo">
+            <h1>Temple Admin Panel</h1>
+        </div>
+        <a href="index.html" class="back-link">← Website చూడండి</a>
+    </header>
+
+    <div class="admin-main">
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="nav-item active" data-module="festivals"><i>🪔</i> Festivals</div>
+            <div class="nav-item" data-module="timings"><i>⏰</i> Darshan Timings</div>
+            <div class="nav-item" data-module="announcements"><i>📢</i> Announcements</div>
+            <div class="nav-item" data-module="gallery"><i>🖼️</i> Image Gallery</div>
+        </aside>
+
+        <section class="admin-content">
+            <div class="content-header">
+                <h2 id="module-title">Festivals</h2>
+                <button class="btn-add" onclick="openAddModal()">+ Add New</button>
+            </div>
+
+            <div class="table-container" id="table-container">
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">Edit Entry</h3>
+                <span style="cursor:pointer" onclick="closeModal()">✖</span>
+            </div>
+            <form id="module-form" onsubmit="saveEntry(event)">
+                <div class="modal-body" id="modal-fields">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModal()" style="margin-right:10px">Cancel</button>
+                    <button type="submit" style="background:#800000; color:white; border:none; padding:8px 20px; border-radius:5px;">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast">Saved!</div>
+
+    <script src="scripts/mockData.js"></script>
+    <script>
+        let currentModule = 'festivals';
+        let editIndex = -1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebar();
+            renderModule();
+        });
+
+        function initSidebar() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelector('.nav-item.active').classList.remove('active');
+                    item.classList.add('active');
+                    currentModule = item.dataset.module;
+                    renderModule();
+                });
+            });
+        }
+
+        function renderModule() {
+            const container = document.getElementById('table-container');
+            const data = window.MOCK_DB[currentModule];
+            document.getElementById('module-title').innerText = currentModule.charAt(0).toUpperCase() + currentModule.slice(1);
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div style="padding:50px; text-align:center">No data</div>`;
+                return;
+            }
+
+            let html = `<table><thead><tr>`;
+            const keys = Object.keys(data[0]);
+            keys.forEach(key => html += `<th>${key}</th>`);
+            html += `<th>Actions</th></tr></thead><tbody>`;
+
+            data.forEach((item, index) => {
+                html += `<tr>`;
+                keys.forEach(key => html += `<td>${item[key]}</td>`);
+                html += `<td><button onclick="openEditModal(${index})">✎</button> <button onclick="deleteEntry(${index})">🗑</button></td></tr>`;
+            });
+            container.innerHTML = html + `</tbody></table>`;
+        }
+
+        function openAddModal() {
+            editIndex = -1;
+            generateFields();
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function openEditModal(index) {
+            editIndex = index;
+            generateFields(window.MOCK_DB[currentModule][index]);
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function generateFields(data = null) {
+            const keys = Object.keys(window.MOCK_DB[currentModule][0]);
+            let html = '';
+            keys.forEach(key => {
+                html += `<div class="form-group"><label>${key.toUpperCase()}</label>`;
+                html += `<input type="text" name="${key}" value="${data ? data[key] : ''}" required></div>`;
+            });
+            document.getElementById('modal-fields').innerHTML = html;
+        }
+
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        function saveEntry(e) {
+            e.preventDefault();
+            const entry = {};
+            new FormData(e.target).forEach((v, k) => entry[k] = v);
+            if (editIndex === -1) window.MOCK_DB[currentModule].unshift(entry);
+            else window.MOCK_DB[currentModule][editIndex] = entry;
+            renderModule(); closeModal(); showToast();
+        }
+
+        function deleteEntry(index) {
+            if (confirm('Delete?')) { window.MOCK_DB[currentModule].splice(index, 1); renderModule(); showToast("Deleted"); }
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m || "Saved";
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temple Admin Panel | Sri Seetha Ramachandra Swamy Devasthanam</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles/variables.css">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-offset: 70px;
+            --sidebar-bg: var(--bg-dark, #2C1810);
+            --sidebar-text: #E0C097;
+            --sidebar-active: var(--govt-maroon);
+            --content-bg: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: var(--content-bg);
+            color: var(--text-dark);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark, #2C1810);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5000;
+        }
+
+        .login-box {
+            background: white;
+            width: 400px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            border-top: 5px solid var(--govt-gold);
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--govt-gold);
+            margin-bottom: 20px;
+        }
+
+        .login-box h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--govt-maroon);
+            margin-bottom: 10px;
+        }
+
+        .login-box p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: var(--govt-maroon);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #6a0000;
+            filter: brightness(1.1);
+        }
+
+        #login-error {
+            color: #e53e3e;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Header */
+        header.admin-header {
+            height: var(--header-offset);
+            background: var(--gradient-header);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo img {
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--govt-gold);
+        }
+
+        .header-logo h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-link, .logout-link {
+            color: var(--govt-gold);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-fast);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .back-link:hover, .logout-link:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Main Wrapper */
+        .admin-main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            opacity: 0; /* Hidden by default until login */
+            transition: opacity 0.5s;
+        }
+
+        /* Sidebar */
+        aside.admin-sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding-top: 20px;
+            display: flex; flex-direction: column;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 12px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            color: #bfa580;
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-active);
+            color: white;
+            border-left-color: var(--govt-gold);
+        }
+
+        /* ... [Rest of the existing styles] ... */
+        section.admin-content { flex: 1; padding: 30px; overflow-y: auto; position: relative; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .content-header h2 { font-family: 'Cinzel', serif; color: var(--govt-maroon); font-size: 1.8rem; }
+        .btn-add { background: var(--govt-maroon); color: white; border: 2px solid var(--govt-gold); padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .table-container { background: white; border-radius: 10px; box-shadow: var(--shadow-card); overflow: hidden; border: 1px solid #ddd; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead { background: #f8f9fa; border-bottom: 2px solid #eee; }
+        th { padding: 15px 20px; font-weight: 600; color: #666; text-transform: uppercase; font-size: 0.85rem; }
+        td { padding: 15px 20px; border-bottom: 1px solid #eee; color: #444; }
+        .btn-icon { background: none; border: none; cursor: pointer; font-size: 1.1rem; margin-right: 10px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-box { background: white; width: 500px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .modal-box form { display: flex; flex-direction: column; overflow: hidden; flex: 1; }
+        .modal-header { background: var(--govt-maroon); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--govt-gold); flex-shrink: 0; }
+        .modal-body { padding: 25px; overflow-y: auto; flex: 1; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        #toast { position: fixed; bottom: 30px; right: 30px; background: #333; color: white; padding: 12px 25px; border-radius: 30px; display: none; z-index: 3000; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <img src="assets/logo_main.jpg" alt="Logo" class="login-logo">
+            <h2>Admin Login</h2>
+            <p>Admin access for Sri Seetha Ramachandra Swamy Devasthanam</p>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn-login">Login Access</button>
+                <div id="login-error">Invalid Username or Password. Please try again.</div>
+            </form>
+            <div style="margin-top: 20px;">
+                <a href="index.html" style="color: #666; text-decoration: none; font-size: 0.8rem;">← Back to Home Site</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Protected Admin Panel -->
+    <header class="admin-header">
+        <div class="header-logo">
+            <img src="assets/logo_main.jpg" alt="Logo">
+            <h1>Temple Admin Panel <span id="mode-badge" style="font-size: 0.7rem; background: #e53e3e; padding: 2px 8px; border-radius: 10px; margin-left:10px;">MOCK MODE</span></h1>
+        </div>
+        <div class="header-actions">
+            <button id="initialize-db-btn" class="back-link" style="background:#2C1810; border:1px solid var(--govt-gold); padding:5px 12px; border-radius:6px; display:none;" onclick="initializeLiveDatabase()">⚡ Sync All to Firebase</button>
+            <a href="index.html" class="back-link">💻 Website</a>
+            <button class="logout-link" onclick="handleLogout()">🚪 Logout</button>
+        </div>
+    </header>
+
+    <div class="admin-main" id="admin-main">
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="nav-item active" onclick="setModule('festivals')"><i>🪔</i> Festivals</div>
+            <div class="nav-item" onclick="setModule('timings')"><i>⏰</i> Darshan Timings</div>
+            <div class="nav-item" onclick="setModule('announcements')"><i>📢</i> Announcements</div>
+            <div class="nav-item" onclick="setModule('volunteers')"><i>📋</i> Volunteers</div>
+            <div class="nav-item" onclick="setModule('gallery')"><i>🖼️</i> Gallery</div>
+            <div class="nav-item" onclick="setModule('committees')"><i>👥</i> Committees</div>
+        </aside>
+
+        <section class="admin-content">
+            <div class="content-header">
+                <h2 id="module-title">Festivals</h2>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-add" id="sync-btn" style="background:#2d3748; display:none;" onclick="syncGalleryWithDefaults()">↺ Sync Gallery</button>
+                    <button class="btn-add" onclick="openAddModal()">+ Add New</button>
+                </div>
+            </div>
+            <div class="table-container" id="table-container"></div>
+        </section>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">Admin Management</h3>
+                <span style="cursor:pointer" onclick="closeModal()">✖</span>
+            </div>
+            <form onsubmit="saveEntry(event)">
+                <div class="modal-body" id="modal-fields"></div>
+                <div style="padding: 15px 25px; text-align: right; background: #f8f9fa; border-top: 1px solid #ddd; flex-shrink: 0;">
+                    <button type="button" onclick="closeModal()" style="margin-right:10px; border:none; background:#ccc; padding:8px 15px; border-radius:4px;">Cancel</button>
+                    <button type="submit" style="background:#800000; color:white; border:none; padding:8px 15px; border-radius:4px; font-weight:600;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast">Saved Successfully!</div>
+
+    <!-- Firebase SDK (Compat Version for Vanilla JS) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="scripts/firebase-config.js?v=6"></script>
+
+    <script src="scripts/mockData.js?v=6"></script>
+    <script src="scripts/api.js?v=6"></script>
+    <script>
+        let currentModule = 'festivals';
+        let editIndex = -1;
+
+        // AUTHENTICATION LOGIC
+        async function checkAuth() {
+            const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+            if (isLoggedIn === 'true') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('admin-main').style.opacity = '1';
+                
+                // --- Update Mode Badge Dynamically ---
+                const badge = document.getElementById('mode-badge');
+                if (badge) {
+                    if (window.USE_FIREBASE && typeof firebase !== 'undefined') {
+                        badge.innerText = "LIVE FIREBASE";
+                        badge.style.backgroundColor = "#28a745"; // Green
+                        
+                        // Show Initialize DB button
+                        const initBtn = document.getElementById('initialize-db-btn');
+                        if (initBtn) initBtn.style.display = 'block';
+                    } else {
+                        badge.innerText = "LOCAL DEMO MODE";
+                        badge.style.backgroundColor = "#f0ad4e"; // Orange
+                    }
+                }
+                
+                // --- Fetch Live Data for Admin ---
+                if (window.ApiService) {
+                    try {
+                        const liveData = await window.ApiService.fetchData();
+                        if (liveData) {
+                            // Normalize keys to lowercase for consistency
+                            for (let key in liveData) {
+                                window.MOCK_DB[key.toLowerCase()] = liveData[key];
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Admin Live Fetch Failed:", e);
+                    }
+                }
+                // ---------------------------------
+                
+                renderModule();
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const error = document.getElementById('login-error');
+
+            if (u === 'admin' && p === 'temple@2026') {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                checkAuth();
+            } else {
+                error.style.display = 'block';
+                setTimeout(() => { error.style.display = 'none'; }, 3000);
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            location.reload();
+        }
+
+        // CONTENT LOGIC
+        const MODULE_SCHEMAS = {
+            festivals: ['name', 'date', 'description'],
+            timings: ['name', 'time', 'type'],
+            announcements: ['announcement_text', 'priority', 'status'],
+            volunteers: ['full_name', 'parent_name', 'age', 'gender', 'mobile', 'email', 'address', 'occupation', 'availability', 'area_of_interest', 'preferred_time', 'emergency_contact', 'consent', 'submitted_at'],
+            gallery: ['image_name', 'image_url', 'display_order', 'status', 'type'],
+            committees: ['name', 'telugu_name', 'lead', 'lead_name', 'description', 'members']
+        };
+
+        function setModule(m) {
+            currentModule = m;
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.innerText.toLowerCase().includes(m)));
+            renderModule();
+        }
+
+        function renderModule() {
+            // Show sync button only for gallery
+            const syncBtn = document.getElementById('sync-btn');
+            if(syncBtn) syncBtn.style.display = (currentModule === 'gallery') ? 'block' : 'none';
+
+            // --- Persistence Initialization (Only in Demo/Mock Mode) ---
+            const isLiveFirebase = window.USE_FIREBASE && typeof firebase !== 'undefined';
+            if (!isLiveFirebase) {
+                const storageKey = `admin_data_${currentModule}`;
+                const persistentData = localStorage.getItem(storageKey);
+                
+                if (persistentData && !window[`loaded_${currentModule}`]) {
+                    window.MOCK_DB[currentModule] = JSON.parse(persistentData);
+                    window[`loaded_${currentModule}`] = true; 
+                }
+            }
+            // ----------------------------------
+
+            // Ensure window.MOCK_DB[currentModule] is initialized as array
+            if (!window.MOCK_DB[currentModule]) {
+                window.MOCK_DB[currentModule] = [];
+            }
+
+            // --- Merge Local Storage Submissions (Forms) ---
+            const localKey = currentModule === 'volunteers' ? 'local_volunteers' : null;
+            
+            if (localKey && !window[`merged_${currentModule}`]) {
+                const localData = JSON.parse(localStorage.getItem(localKey) || '[]');
+                window.MOCK_DB[currentModule] = [...localData, ...window.MOCK_DB[currentModule]];
+                window[`merged_${currentModule}`] = true;
+                
+                // Clear local storage buffer and save merged state immediately
+                localStorage.removeItem(localKey);
+                localStorage.setItem(`admin_data_${currentModule}`, JSON.stringify(window.MOCK_DB[currentModule]));
+            }
+            // ----------------------------------------
+
+            let data = window.MOCK_DB[currentModule];
+
+            document.getElementById('module-title').innerText = currentModule.charAt(0).toUpperCase() + currentModule.slice(1).replace('_', ' ');
+            if(!data || data.length === 0) { document.getElementById('table-container').innerHTML = '<div style="padding:50px; text-align:center">No records found.</div>'; return; }
+            
+            let keys = data.length > 0 ? Object.keys(data[0]) : (MODULE_SCHEMAS[currentModule] || []);
+            keys = keys.filter(k => k !== 'id');
+            let html = '<table><thead><tr>' + keys.map(k => `<th>${k.replace(/_/g, ' ')}</th>`).join('') + '<th>Actions</th></tr></thead><tbody>';
+            data.forEach((item, idx) => {
+                html += '<tr>' + keys.map(k => {
+                    const val = item[k] !== undefined ? item[k] : '';
+                    if (k.includes('image')) return `<td><img src="${val}" style="width:40px; height:30px; object-fit:cover; border-radius:4px;"></td>`;
+                    if (Array.isArray(val)) {
+                        return `<td><ul style="list-style:none; padding:0; margin:0; font-size:0.8rem; line-height:1.3; max-width:260px;">${val.map(m => `<li style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${m}">• ${m}</li>`).join('')}</ul></td>`;
+                    }
+                    if (typeof val === 'string' && val.length > 60) {
+                        return `<td title="${val}">${val.substring(0, 57)}...</td>`;
+                    }
+                    return `<td>${val}</td>`;
+                }).join('') + `<td><button onclick="openEditModal(${idx})" class="btn-icon">✎</button> <button onclick="deleteEntry(${idx})" class="btn-icon" style="color:#e53e3e">🗑</button></td></tr>`;
+            });
+            document.getElementById('table-container').innerHTML = html + '</tbody></table>';
+        }
+
+        function openAddModal() { editIndex = -1; generateFields(); document.getElementById('modal').style.display = 'flex'; }
+        function openEditModal(idx) { editIndex = idx; generateFields(window.MOCK_DB[currentModule][idx]); document.getElementById('modal').style.display = 'flex'; }
+        function generateFields(data = null) {
+            if (currentModule === 'committees') {
+                const parsed = {
+                    name: data ? data.name : 'Saigudem Dharma Jagarana Committee',
+                    telugu_name: data ? data.telugu_name : 'సాయిగూడెంధర్మజాగరణకమిటి',
+                    description: data ? data.description : 'Responsible for temple infrastructure, daily rituals, festivals, and pilgrim welfare at Sri Seetha Ramachandra Swamy Devasthanam, Saigudem.',
+                    president: data ? data.lead_name : 'Sri Myla Shrisailam (మైల శ్రీశైలం)',
+                    vice_presidents: 'Sri Gangadari Upendher, Sri Konda Chanda Reddy',
+                    general_secretary: 'Sri Nalabolu Ramakrishna Reddy',
+                    secretaries: 'Sri Beedani Balaraj, Sri Gangani Ramachander, Sri Udhari Praveen',
+                    treasurer: 'Sri Puttap Pawan',
+                    joint_treasurer: 'Sri Myla Anjaneyulu'
+                };
+
+                if (data && Array.isArray(data.members)) {
+                    data.members.forEach(m => {
+                        const colonIdx = m.indexOf(':');
+                        const val = colonIdx !== -1 ? m.substring(colonIdx + 1).trim() : m;
+                        
+                        if (m.includes("Vice President") || m.includes("ఉపాధ్యక్షులు")) {
+                            parsed.vice_presidents = val;
+                        } else if (m.includes("General Secretary") || m.includes("ప్రధాన కార్యదర్శి")) {
+                            parsed.general_secretary = val;
+                        } else if (m.includes("Joint Treasurer") || m.includes("ఉపకోశాధికారి")) {
+                            parsed.joint_treasurer = val;
+                        } else if (m.includes("Treasurer") || m.includes("కోశాధికారి")) {
+                            parsed.treasurer = val;
+                        } else if (m.includes("Secretary") || m.includes("కార్యదర్శి")) {
+                            parsed.secretaries = val;
+                        }
+                    });
+                }
+
+                let html = `
+                    <div class="form-group">
+                        <label>COMMITTEE ENGLISH NAME</label>
+                        <input name="name" value="${parsed.name}" required style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>COMMITTEE TELUGU NAME</label>
+                        <input name="telugu_name" value="${parsed.telugu_name}" required style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>DESCRIPTION</label>
+                        <textarea name="description" required style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ddd; border-radius: 5px; height: 80px; font-family: inherit; resize: vertical;">${parsed.description}</textarea>
+                    </div>
+                    <hr style="margin: 20px 0; border: none; border-top: 1px dashed #ccc;">
+                    <h4 style="margin-bottom: 15px; color: #800000; font-family: 'Cinzel', serif;">DESIGNATIONS & NAMES</h4>
+                    
+                    <div class="form-group" style="background: #fdf8ec; padding: 10px; border-radius: 6px; border-left: 4px solid var(--govt-gold); margin-bottom: 12px;">
+                        <label style="color: #666; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;">President (అధ్యక్షులు)</label>
+                        <input name="c_president" value="${parsed.president}" placeholder="Enter name(s)" required style="background: white; width: 100%; box-sizing: border-box; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    
+                    <div class="form-group" style="background: #fdf8ec; padding: 10px; border-radius: 6px; border-left: 4px solid var(--govt-gold); margin-bottom: 12px;">
+                        <label style="color: #666; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;">Vice Presidents (ఉపాధ్యక్షులు)</label>
+                        <input name="c_vice_presidents" value="${parsed.vice_presidents}" placeholder="Enter name(s)" required style="background: white; width: 100%; box-sizing: border-box; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    
+                    <div class="form-group" style="background: #fdf8ec; padding: 10px; border-radius: 6px; border-left: 4px solid var(--govt-gold); margin-bottom: 12px;">
+                        <label style="color: #666; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;">General Secretary (ప్రధాన కార్యదర్శి)</label>
+                        <input name="c_general_secretary" value="${parsed.general_secretary}" placeholder="Enter name(s)" required style="background: white; width: 100%; box-sizing: border-box; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    
+                    <div class="form-group" style="background: #fdf8ec; padding: 10px; border-radius: 6px; border-left: 4px solid var(--govt-gold); margin-bottom: 12px;">
+                        <label style="color: #666; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;">Secretaries (కార్యదర్శులు)</label>
+                        <input name="c_secretaries" value="${parsed.secretaries}" placeholder="Enter name(s)" required style="background: white; width: 100%; box-sizing: border-box; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    
+                    <div class="form-group" style="background: #fdf8ec; padding: 10px; border-radius: 6px; border-left: 4px solid var(--govt-gold); margin-bottom: 12px;">
+                        <label style="color: #666; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;">Treasurer (కోశాధికారి)</label>
+                        <input name="c_treasurer" value="${parsed.treasurer}" placeholder="Enter name(s)" required style="background: white; width: 100%; box-sizing: border-box; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    
+                    <div class="form-group" style="background: #fdf8ec; padding: 10px; border-radius: 6px; border-left: 4px solid var(--govt-gold); margin-bottom: 12px;">
+                        <label style="color: #666; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;">Joint Treasurer (ఉపకోశాధికారి)</label>
+                        <input name="c_joint_treasurer" value="${parsed.joint_treasurer}" placeholder="Enter name(s)" required style="background: white; width: 100%; box-sizing: border-box; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                `;
+                document.getElementById('modal-fields').innerHTML = html;
+                return;
+            }
+
+            let keys = [];
+            if (window.MOCK_DB[currentModule] && window.MOCK_DB[currentModule].length > 0) {
+                keys = Object.keys(window.MOCK_DB[currentModule][0]);
+            } else {
+                keys = MODULE_SCHEMAS[currentModule] || [];
+            }
+            keys = keys.filter(k => k !== 'id');
+            let html = '';
+            keys.forEach(k => {
+                const label = k.replace(/_/g, ' ').toUpperCase();
+                const val = data ? data[k] : '';
+                
+                html += `<div class="form-group"><label>${label}</label>`;
+                
+                if (k.toLowerCase().includes('image')) {
+                    html += `
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input name="${k}" id="field-${k}" value="${val}" required style="flex:1">
+                            <label class="btn-add" style="font-size:0.8rem; padding:5px 10px; margin:0; cursor:pointer;">
+                                📁 Upload
+                                <input type="file" style="display:none" onchange="handleFileUpload(this, 'field-${k}')" accept="image/*,video/*">
+                            </label>
+                        </div>
+                    `;
+                } else if (k === 'status') {
+                    let options = ['Active', 'Inactive'];
+                    if (currentModule === 'gallery') {
+                        options = ['Show', 'Hide'];
+                    } else if (currentModule === 'donor_list') {
+                        options = ['Received', 'Pending'];
+                    }
+                    
+                    html += `<select name="${k}" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: white; font-family: inherit; font-size: 1rem; color: #333; cursor: pointer;">`;
+                    options.forEach(opt => {
+                        const selected = (val || '').toLowerCase() === opt.toLowerCase() ? 'selected' : '';
+                        html += `<option value="${opt}" ${selected}>${opt}</option>`;
+                    });
+                    html += `</select>`;
+                } else if (k === 'priority') {
+                    let options = ['High', 'Medium', 'Low'];
+                    html += `<select name="${k}" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: white; font-family: inherit; font-size: 1rem; color: #333; cursor: pointer;">`;
+                    options.forEach(opt => {
+                        const selected = (val || '').toLowerCase() === opt.toLowerCase() ? 'selected' : '';
+                        html += `<option value="${opt}" ${selected}>${opt}</option>`;
+                    });
+                    html += `</select>`;
+                } else if (k === 'members') {
+                    const displayVal = Array.isArray(val) ? val.join(', ') : val;
+                    html += `<input name="${k}" value="${displayVal}" placeholder="e.g. Member 1, Member 2, Member 3" required>`;
+                } else {
+                    html += `<input name="${k}" value="${val}" required>`;
+                }
+                html += `</div>`;
+            });
+            document.getElementById('modal-fields').innerHTML = html;
+        }
+
+        async function handleFileUpload(input, targetId) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const target = document.getElementById(targetId);
+            const originalValue = target.value;
+            target.value = "Uploading...";
+            target.disabled = true;
+
+            try {
+                if (window.ApiService && !window.ApiService.USE_MOCK) {
+                    const result = await window.ApiService.uploadImage(file, file.name, file.type);
+                    if (result.status === 'success') {
+                        target.value = result.url;
+                        showToast("Uploaded to Cloud!");
+                    } else {
+                        target.value = originalValue;
+                        alert("Upload Failed: " + result.message);
+                    }
+                } else {
+                    target.value = `assets/gallery/${file.name}`;
+                    showToast("Local path set (Mock Mode)");
+                }
+            } catch (err) {
+                console.error(err);
+                target.value = originalValue;
+            } finally {
+                target.disabled = false;
+            }
+        }
+
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        async function saveEntry(e) {
+            e.preventDefault();
+            
+            // Get submit button and show loading state
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn ? submitBtn.innerText : "Save Changes";
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Syncing with Cloud...";
+            }
+            
+            let entry = {};
+            if (currentModule === 'committees') {
+                const formData = new FormData(form);
+                entry = {
+                    name: formData.get('name'),
+                    telugu_name: formData.get('telugu_name'),
+                    description: formData.get('description'),
+                    lead: "President (అధ్యక్షులు)",
+                    lead_name: formData.get('c_president'),
+                    members: [
+                        "Vice Presidents (ఉపాధ్యక్షులు): " + formData.get('c_vice_presidents'),
+                        "General Secretary (ప్రధాన కార్యదర్శి): " + formData.get('c_general_secretary'),
+                        "Secretaries (కార్యదర్శులు): " + formData.get('c_secretaries'),
+                        "Treasurer (కోశాధికారి): " + formData.get('c_treasurer'),
+                        "Joint Treasurer (ఉపకోశాధికారి): " + formData.get('c_joint_treasurer')
+                    ]
+                };
+            } else {
+                new FormData(form).forEach((v, k) => {
+                    // Special handling for array fields like 'members'
+                    if (k === 'members' && typeof v === 'string') {
+                        entry[k] = v.split(',').map(item => item.trim()).filter(Boolean);
+                    } else {
+                        entry[k] = v;
+                    }
+                });
+            }
+            
+            if (!window.MOCK_DB[currentModule]) {
+                window.MOCK_DB[currentModule] = [];
+            }
+
+            // Temporarily store the old MOCK_DB state for rollback on error
+            const previousDataList = [...window.MOCK_DB[currentModule]];
+            
+            if(editIndex === -1) {
+                window.MOCK_DB[currentModule].unshift(entry);
+            } else {
+                window.MOCK_DB[currentModule][editIndex] = entry;
+            }
+
+            // Try to sync to Firebase if in live mode
+            let syncSuccess = true;
+            if (window.ApiService && !window.ApiService.USE_MOCK) {
+                try {
+                    const res = await window.ApiService.syncData(currentModule, window.MOCK_DB[currentModule]);
+                    if (res && res.status === 'error') {
+                        alert("Firebase Sync Failed: " + res.message);
+                        syncSuccess = false;
+                    } else {
+                        showToast(res.message || "Saved and Synced with Firebase!");
+                    }
+                } catch (err) {
+                    alert("Firebase Sync Failed: " + err.message);
+                    syncSuccess = false;
+                }
+            } else {
+                showToast("Saved to Local Storage (Demo Mode)");
+            }
+
+            if (syncSuccess) {
+                // Persist locally for fallback
+                localStorage.setItem(`admin_data_${currentModule}`, JSON.stringify(window.MOCK_DB[currentModule]));
+                renderModule();
+                closeModal();
+            } else {
+                // Rollback local MOCK_DB state on failure
+                window.MOCK_DB[currentModule] = previousDataList;
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalBtnText;
+                }
+            }
+        }
+
+        async function deleteEntry(index) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                const oldList = [...window.MOCK_DB[currentModule]];
+                
+                window.MOCK_DB[currentModule].splice(index, 1);
+                
+                let syncSuccess = true;
+                if (window.ApiService && !window.ApiService.USE_MOCK) {
+                    try {
+                        showToast("Syncing deletion to cloud...");
+                        const res = await window.ApiService.syncData(currentModule, window.MOCK_DB[currentModule]);
+                        if (res && res.status === 'error') {
+                            alert("Firebase Sync Failed: " + res.message);
+                            syncSuccess = false;
+                        } else {
+                            showToast("Deleted & Synced with Firebase!");
+                        }
+                    } catch (err) {
+                        alert("Firebase Sync Failed: " + err.message);
+                        syncSuccess = false;
+                    }
+                } else {
+                    showToast("Deleted Locally (Demo Mode)");
+                }
+
+                if (syncSuccess) {
+                    localStorage.setItem(`admin_data_${currentModule}`, JSON.stringify(window.MOCK_DB[currentModule]));
+                    renderModule();
+                } else {
+                    // Rollback MOCK_DB list
+                    window.MOCK_DB[currentModule] = oldList;
+                    renderModule();
+                }
+            }
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m || "Saved";
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function syncGalleryWithDefaults() {
+            if(confirm('This will reset your gallery to the latest uploaded images (including the new video). Proceed?')) {
+                localStorage.removeItem('admin_data_gallery');
+                location.reload();
+            }
+        }
+
+        async function initializeLiveDatabase() {
+            if (confirm("This will overwrite all collections in your live Firebase Firestore with the default temple data (including Festivals, Timings, Announcements, and Committees). Proceed?")) {
+                const initBtn = document.getElementById('initialize-db-btn');
+                const originalText = initBtn.innerText;
+                initBtn.innerText = "Syncing...";
+                initBtn.disabled = true;
+
+                try {
+                    const collections = ['updates', 'gallery', 'announcements', 'timings', 'festivals', 'about', 'committees'];
+                    for (const col of collections) {
+                        showToast(`Syncing ${col}...`);
+                        const defaultData = window.MOCK_DB[col];
+                        if (defaultData) {
+                            const res = await window.ApiService.syncData(col, defaultData);
+                            if (res && res.status === 'error') {
+                                throw new Error(`Failed to sync ${col}: ${res.message}`);
+                            }
+                        }
+                    }
+                    alert("Jai Sri Rama! All default temple data has been successfully synced to the live Firebase database. The website will now reflect these updates instantly!");
+                    location.reload();
+                } catch (err) {
+                    console.error("Initialization Failed:", err);
+                    alert("Database Sync Failed: " + err.message);
+                } finally {
+                    initBtn.innerText = originalText;
+                    initBtn.disabled = false;
+                }
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+</body>
+</html>
